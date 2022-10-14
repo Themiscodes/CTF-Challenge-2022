@@ -1,6 +1,6 @@
 # CTF Computer Security Challenge 2022
 
-The purpose of this competition was to learn the basic techniques of vulnerability assessment, cryptography and exploitation in six security challenges of increasing difficulty. Among the methods used were file forensics, breaking encryption schemes such as RSA, AES and Shamir's Secret Sharing and binary exploitation through buffer overflow attacks.
+The purpose of this competition was to learn the basic techniques of vulnerability assessment, cryptography and exploitation in six security challenges of increasing difficulty. Among the methods used were file forensics, reverse engineering, breaking encryption schemes such as RSA, AES and Shamir's Secret Sharing and binary exploitation through buffer overflow attacks.
 
 The code of each solution can be found in the corresponding folder and a detailed report can be found below. This was a team challenge introduced as an assignment for the YS13 Computer Security course of Spring 2022 and was completed in collaboration with [Giannis Dravilas](https://github.com/giannisdravilas).
  
@@ -12,7 +12,7 @@ The code of each solution can be found in the corresponding folder and a detaile
 
 - Initially, inspecting the web source of the onion page that was given, we found a link to a blog. Among other things it mentioned that the server-info page should be hidden. By connecting on the page we found another link, where using the information in the server-info (i.e. that it is in phps format) we added the extension `/access.phps`.
 
-- On this page there was a simple problem that we solved in [riddle1.py]() and the output was: 1337. This, however, was not accepted, so we converted it to 0001337 since it should be of length 7 characters. On the url we also added to bypass the password check a simple array so that in that way `strcmp()` would return 0.
+- On this page there was a simple problem that we solved in [riddle1.py](Problem1/riddle1.py) and the output was: 1337. This, however, was not accepted, so we converted it to 0001337 since it should be of length 7 characters. On the url we also added to bypass the password check a simple array so that in that way `strcmp()` would return 0.
 
 - This way, we succesfully connected and the next part was revealed, namely the directory: `/blogposts7589109238`. Among the links in that page there was a diary with the following message: `Giorgos Komninos winner visitor# 834472`.
 
@@ -23,13 +23,13 @@ The code of each solution can be found in the corresponding folder and a detaile
 - By changing the page cookie from the console we got the hint: `Check directory /sekritbackup7547`. So we were directed to this onion page and in the file `notes.txt` there was information about ropsten blockchain. Going in this site and changing the input data to UTF8 we got: `bigtent`. There was also a description of the passphrase used:
 `key = SHA256(date in RFC3339 format> + "" + string>)`
 
-- To find the date we wrote [riddle2.py](), where we tried all possible dates backwards, starting from 2023. Converting it to `sha256`, we tested with every time whether it is possible to decode to gpg. So in the end we managed to find the combination in [passphrase.key]() and using it we managed to decrypt gpg.
+- To find the date we wrote [riddle2.py](Problem1/riddle2.py), where we tried all possible dates backwards, starting from 2023. Converting it to `sha256`, we tested with every time whether it is possible to decode to gpg. So in the end we managed to find the combination in [passphrase.key](Problem1/passphrase.key) and using it we managed to decrypt gpg.
 
-- In the `signal.txt` file there was a subtle hint that the information was a git commit. While in `firefox.log` there was the same link several times. Opening wikipedia and reading the contents we didn't find anything interesting. To find out if there was anything else in the `firefox.log` file besides this link, we wrote the bash script, [riddle3.sh](), which just reads each line and if there is anything aside from that it prints it. 
+- In the `signal.txt` file there was a subtle hint that the information was a git commit. While in `firefox.log` there was the same link several times. Opening wikipedia and reading the contents we didn't find anything interesting. To find out if there was anything else in the `firefox.log` file besides this link, we wrote the bash script, [riddle3.sh](Problem1/riddle3.sh), which just reads each line and if there is anything aside from that it prints it. 
 
 - After a while it printed another link, which we combined with the commit from the previous message to get a github repository. There, it was obvious from the description and variable names that the problem was referring to the RSA cryptosystem.
 
-- So to reverse engineer it, in [riddle4.py]() we first found p and q and then phi. From there we were able to produce x and y, from which the corresponding Ex kai Ey were produced. By concatenating the link, we were directed to a page, where the first flag was displayed:
+- So to reverse engineer it, in [riddle4.py](Problem1/riddle4.py) we first found p and q and then phi. From there we were able to produce x and y, from which the corresponding Ex kai Ey were produced. By concatenating the link, we were directed to a page, where the first flag was displayed:
 
 ```
 FLAG={GilmansPointKilimanjaro}
