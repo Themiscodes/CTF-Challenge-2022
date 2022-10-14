@@ -1,0 +1,17 @@
+**
+ * Hey Maria... So I went to the Rivest club again yesterday and met a guy who
+ * sold me tickets that will take me out of this crazy city. I hope that in a
+ * few days we will be together again. Find me at:
+ *
+ *     http://aqwlvm4ms72zriryeunpo3uk7myqjvatba4ikl3wy6etdrrblbezlfqd.onion/y||x||y||x.txt
+ *
+ *          where || means concatenation
+ *
+ ******
+ *
+ * N = 127670779
+ * e = 7
+ *
+ * E(x) = 32959265
+ * E(y) = 47487400
+ */

@@ -1,0 +1,11 @@
+Blog entry #2
+
+I know you all want to learn about my hobbies and interests!
+
+Due to the sensitive nature of my affiliation with the "Plan X" group I'm not just writing this stuff out here for all the creeps to see it.
+
+Fortunately, a valued customer with a cool black hat recently gave me a secure interface for storing sensitive information. He said that it's even open source (github:chatziko/pico) and ultra secure.
+
+The secure Plan X server is up: xtfbiszfeilgi672ted7hmuq5v7v3zbitdrzvveg2qvtz4ar5jndnxad.onion! I can finally sleep feeling safe... Please come by the store (when we open) and ask me for the password first.
+
+socat + onions = perfect recipe

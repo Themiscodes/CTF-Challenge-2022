@@ -1,0 +1,26 @@
+entry #79:
+
+so i recently found this software called gpg which is capable of encrypting my
+files, and i came up with a very smart and easy-to-remember way to finally keep
+my data secret:
+
+First of all, I generate a random passphrase using the SHA256 hash algorithm,
+and then I save it on disk in hex as "passphrase.key". In particular, here is
+how to generate the key:
+
+    key = SHA256(<current date in RFC3339 format> + " " + <secret string>)
+
+    e.g. so if the secret string is "cement" then the key would be:
+             key = SHA256("2020-05-18 cement") = cadf84c9706ff4866f8af17d3c0e3503da44aea21c2580bd6452f7a1b8b48ed2
+
+Then I use the gpg software to encrypt my files using the passphrase.key file:
+
+    $ gpg --symmetric --passphrase-file passphrase.key --batch plaintext.txt
+
+I then delete all the unencrypted files and the key files and just leave the
+encrypted files behind.
+
+XXX don't forget to delete this file, the key and the script before crossing borders
+
+XXX ropsten 0xdcf1bfb1207e9b22c77de191570d46617fe4cdf4dbc195ade273485dddc16783
+
