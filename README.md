@@ -1,6 +1,6 @@
 # CTF Computer Security Challenge 2022
 
-The purpose of this competition was to learn the basic techniques of vulnerability assessment, cryptography and exploitation in six security challenges of increasing difficulty. Among the methods used were file forensics, reverse engineering, breaking encryption schemes such as RSA, AES and Shamir's Secret Sharing and binary exploitation through buffer overflow attacks.
+The purpose of this Capture the Flag competition was to learn the basic techniques of vulnerability assessment, cryptography and exploitation in six security challenges of increasing difficulty. Among the methods used were file forensics, reverse engineering, breaking encryption schemes such as RSA, AES and Shamir's Secret Sharing and binary exploitation through buffer overflow attacks.
 
 The code of each solution can be found in the corresponding folder and a detailed report can be found below. This was a team challenge introduced as an assignment for the YS13 Computer Security course of Spring 2022 and was completed in collaboration with [Giannis Dravilas](https://github.com/giannisdravilas).
  
