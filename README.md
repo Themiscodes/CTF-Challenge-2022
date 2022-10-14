@@ -41,15 +41,15 @@ FLAG={GilmansPointKilimanjaro}
 
 - Initially, trying to decompress it, we got the message that the file is corrupted. Changing it to `.txt` and doing cat we saw that at the beginning it had the message: `pleaseletmesleeep`. From this we concluded that the correct header was missing. So, looking at https://en.wikipedia.org/wiki/List_of_file_signatures for the magic bytes of `tar.gz` files, we saw that these are: `1F 8B`.
 
-- Looking at the hex with the command `xdd` we saw that these bytes were in the 32nd and 33rd bytes of the file. So, with [riddle1.sh](), we managed to remove the "bad bytes" using `dd`. The file could then be decompressed normally and the `/sss` directory appeared.
+- Looking at the hex with the command `xdd` we saw that these bytes were in the 32nd and 33rd bytes of the file. So, with [riddle1.sh](Problem2/riddle1.sh), we managed to remove the "bad bytes" using `dd`. The file could then be decompressed normally and the `/sss` directory appeared.
 
-- Inside there was a `.git` folder. Since it was a repository without files, we first tried to see the information it had in HEAD and logs and then objects. To see what all the objects contained, we wrote the script [riddle2.sh]() which recursively parses all the subfolders, and concatenates the folder name with the first 4 digits of the file, to get the commit.
+- Inside there was a `.git` folder. Since it was a repository without files, we first tried to see the information it had in HEAD and logs and then objects. To see what all the objects contained, we wrote the script [riddle2.sh](Problem2/riddle2.sh) which recursively parses all the subfolders, and concatenates the folder name with the first 4 digits of the file, to get the commit.
 
 - This way, we located the files `polywork.py` and `sss.py`, which we found useful in understanding that the cryptography is done with **Shamir's Secret Sharing** algorithm. We then adjusted the script with `grep` to see if the seed exists and found it in one of the files.
 
-- Then, to find the shares we adjusted the script again with grep with the `shares` keyword and three files were located, which had three shares each. To generate the secret from them, we saw the code of `polywork.py` where it was a degree 2 polynomial and we noticed that only the first share was enough, since we could generate the coefficients through the seed.
+- Then, to find the shares we adjusted the script again with grep with the `shares` keyword and three files were located, which had three shares each. To generate the secret from them, we saw the code of [polywork.py](Problem2/Messages/polywork.py) where it was a degree 2 polynomial and we noticed that only the first share was enough, since we could generate the coefficients through the seed.
 
-- Thus, using the first share we wrote the first Lagrange equation, i.e. for x = 1, solving for the unknown share[0]. The code can be found in [riddle3.py](). This way, we got the two flags:
+- Thus, using the first share we wrote the first Lagrange equation, i.e. for x = 1, solving for the unknown share[0]. The code can be found in [riddle3.py](Problem2/riddle3.py). This way, we got the two flags:
 
 ```
 FLAG={RahulKhandelwal}
@@ -62,7 +62,7 @@ FLAG={TimeTravelPossible!!?}
 
 - Downloading and following the instructions on how to set it up, we made the necessary changes on our system and installed the required libraries. When we tried to run make, although the compilation was successful, a warning appeared for the command `printf(auth_username);`, which made it vulnerable to a string format attack.
 
-- Also, examining the code on the function `check_auth()` we saw that this can happen by keeping the password null. As is described in: https://ctf101.org/binary-exploitation/what-is-a-format-string-vulnerability in order to take advantage of this vulnerability, we only had to enter in the username as many `%x` as the number of stack values ​​that we want to be popped from the stack and by adding `%s` to the end, the result would be displayed as a string. So after attempting various combinations we succeeded and with `%x%x%x%x%x%x%s` we got the admin password: `0fba1b57781369f0dcfb5b55e61764fd`.
+- Also, examining the code on the function `check_auth()` we saw that this can happen by keeping the password null. As is described in: https://ctf101.org/binary-exploitation/what-is-a-format-string-vulnerability in order to take advantage of this vulnerability, we only had to enter in the username as many `%x` as the number of stack values that we want to be popped from the stack and by adding `%s` to the end, the result would be displayed as a string. So after attempting various combinations we succeeded and with `%x%x%x%x%x%x%s` we got the admin password: `0fba1b57781369f0dcfb5b55e61764fd`.
 
 - This appeared in the web developer tools in the authenticate header, as we had also seen in the pico code. Since we knew that the code was hashed in md5, we reversed it online and found a string that matched: `hammertime`. By using this as a password we succesfully connected and got the answer to the third question and the third flag:
 
@@ -82,11 +82,11 @@ FLAG={Stop! Hammer Time}
 
 - When `wrong secret` was displayed as a response, this would mean that we have found the intermediate byte in this position as it will have correct padding. So we stored it in intermediates to be used in later iterations by "XORing" it with the padding it was found with.
 
-- Initially, we tested just to find the last byte, to make sure that the equations we wrote were correct and that there is indeed a byte that returns `wrong secret`. After finding the last byte this way, we wrote [riddle1.py](), which automated the process for all the bytes.
+- Initially, we tested just to find the last byte, to make sure that the equations we wrote were correct and that there is indeed a byte that returns `wrong secret`. After finding the last byte this way, we wrote [riddle1.py](Problem4/riddle1.py), which automated the process for all the bytes.
 
 - We use the auxiliary array `inters` to store each byte we found and posting to the onion site with each cyphertext we were testing, we examined the response by handling the exception that was returned. This stopped after it has been found, and if it wasn't continued by increasing the byte. On the odd occasion, that there was an error due to refused connection or time out, then the program tried again with the same ciphertext.
 
-- In [riddle2.py]() we generalised and automated the process for when there are more than two blocks for decryption. That is, it works in the same way, starting from the penultimate block, but continues until the blocks are exhausted. In [run.sh]() is the script that runs this.
+- In [riddle2.py](Problem4/riddle2.py) we generalised and automated the process for when there are more than two blocks for decryption. That is, it works in the same way, starting from the penultimate block, but continues until the blocks are exhausted. In [run.sh](Problem4/run.sh) is the script that runs this.
 
 - Finally, after finding all the bytes, by simply doing XOR with the bytes of the cyphertext, we managed to recover the plaintext which is also the flag of the question:
 
@@ -106,11 +106,11 @@ FLAG={/secet/x}
 
 - We noticed that the stack consisted of 13 words, the buffer, 1 word, the canary (that ended in `00`), 2 words, the ebp and the return address. The aforementioned structure had to be replicated in our attack string, simply modifying it with the return address of the system call.
 
-- Next step, was to manage to gain access to the return address through the vulnerability of `printf()`. Running the server on linux02 that was suggested in the initial page and using gdb we found the return address of `check_auth()` that we used in [test_localhost.py](). The script tries combinations of `%08x` until the return address is found in the bytes returned by the vulnerable `printf()`. This was achieved in the test in the 31st byte.
+- Next step, was to manage to gain access to the return address through the vulnerability of `printf()`. Running the server on linux02 that was suggested in the initial page and using gdb we found the return address of `check_auth()` that we used in [test_localhost.py](Problem5/test_localhost.py). The script tries combinations of `%08x` until the return address is found in the bytes returned by the vulnerable `printf()`. This was achieved in the test in the 31st byte.
 
 - We observed that the 30th byte was 136 bytes away from the ebp, while the 28th byte was 1685936 bytes away from the system address, while the 27th and 29th bytes contained the canary information. In this way, we repeated this process a few times to make sure that the offsets always remain constant. 
 
-- Finally, we set up in [riddle1.py]() the attack, adding the appropriate offsets. The process was automated in [run.sh]() for other files as well. This way, we got the contents of `/secet/x`, which redirected us to `/secet/y` and we got the flag for this question:
+- Finally, we set up in [riddle1.py](Problem5/riddle1.py) the attack, adding the appropriate offsets. The process was automated in [run.sh](Problem5/run.sh) for other files as well. This way, we got the contents of `/secet/x`, which redirected us to `/secet/y` and we got the flag for this question:
 
 ```
 FLAG={41.99299141232}
@@ -124,7 +124,7 @@ FLAG={41.99299141232}
 
 - The second part of the flag was rather straightforward since we only needed to modify the code from the previous question to find the public IP of the machine. To achieve that we simply replaced the `cat` command with a `curl` and a url that returns the IP address. 
 
-- So with `api.ipify.org` we were able to get `54.210.15.244` for the second part of the flag. The code for this is in: [riddle1.py]() and the script [run.sh]() automates the process. Finally, by concatenating the Chess move, along with the IP we were able to get the final flag:
+- So with `api.ipify.org` we were able to get `54.210.15.244` for the second part of the flag. The code for this is in: [riddle1.py](Problem6/riddle1.py) and the script [run.sh](Problem6/run.sh) automates the process. Finally, by concatenating the Chess move, along with the IP we were able to get the final flag:
 
 ```
 FLAG={c454.210.15.244}
